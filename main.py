@@ -1,5 +1,6 @@
 from tkinter import *
 import pandas as pd
+import time
 
 
 class LogIn():
@@ -65,6 +66,7 @@ class Registro():
 		self.PasswordE = Entry(self.FrameR, textvariable=self.TextPE,font=("Times New Roman",14)).place(width=300,height=30,x=505,y=440)
 		self.BReg = Button(self.FrameR,text="Regresar",command=self.OpIni,font=("Times New Roman",15)).place(x=500,y=500)
 		self.BEnv = Button(self.FrameR,text="Enviar", command=self.Ingreso,font=("Times New Roman",15)).place(x=600,y=500)
+		self.Check = Label(self.FrameR)
 		self.Raiz.mainloop()
 
 	def OpIni(self):
@@ -72,27 +74,30 @@ class Registro():
 		Open = LogIn()
 
 	def Ingreso(self):
-		Texto_Nombre = self.TextNE.get()
-		Texto_Apellido = self.TextAE.get()
-		Texto_Edad = self.TextEE.get()
-		Texto_Sexo = self.TextSE.get()
-		Texto_Carrera = self.TextCE.get()
-		Texto_Division = self.TextDE.get()
-		Texto_Correo = self.TextCrE.get()
-		Texto_Password = self.TextPE.get()
+#		Texto_Nombre = self.TextNE.get()
+#		Texto_Apellido = self.TextAE.get()
+#		Texto_Edad = self.TextEE.get()
+#		Texto_Sexo = self.TextSE.get()
+#		Texto_Carrera = self.TextCE.get()
+#		Texto_Division = self.TextDE.get()
+#		Texto_Correo = self.TextCrE.get()
+#		Texto_Password = self.TextPE.get()
 		
-		file = open("DatosUsuario.csv","a")
-		file.write(Texto_Nombre + ",")
-		file.write(Texto_Apellido + ",")
-		file.write(Texto_Edad + ",")
-		file.write(Texto_Sexo + ",")
-		file.write(Texto_Carrera + ",")
-		file.write(Texto_Division + ",")
-		file.write(Texto_Correo + ",")
-		file.write(Texto_Password + "\n")
-		file.close()
+#		file = open("DatosUsuario.csv","a")
+#		file.write(Texto_Nombre + ",")
+#		file.write(Texto_Apellido + ",")
+#		file.write(Texto_Edad + ",")
+#		file.write(Texto_Sexo + ",")
+#		file.write(Texto_Carrera + ",")
+#		file.write(Texto_Division + ",")
+#		file.write(Texto_Correo + ",")
+#		file.write(Texto_Password + "\n")
+#		file.close()
 
-		
+		self.Check.config(text="Registro realizado correctamente!",font=("Times New Roman",15),bg="green2")
+		self.Check.place(x=120,y=500)
+
+		self.Check.after(5000,self.OpIni)
 
 #app = LogIn()
 app = Registro()
