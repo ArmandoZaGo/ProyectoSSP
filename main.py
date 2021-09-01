@@ -1,6 +1,5 @@
 from tkinter import *
 import pandas as pd
-import time
 
 
 class LogIn():
@@ -74,30 +73,45 @@ class Registro():
 		Open = LogIn()
 
 	def Ingreso(self):
-#		Texto_Nombre = self.TextNE.get()
-#		Texto_Apellido = self.TextAE.get()
-#		Texto_Edad = self.TextEE.get()
-#		Texto_Sexo = self.TextSE.get()
-#		Texto_Carrera = self.TextCE.get()
-#		Texto_Division = self.TextDE.get()
-#		Texto_Correo = self.TextCrE.get()
-#		Texto_Password = self.TextPE.get()
+		Texto_Nombre = self.TextNE.get()
+		Texto_Apellido = self.TextAE.get()
+		Texto_Edad = self.TextEE.get()
+		Texto_Sexo = self.TextSE.get()
+		Texto_Carrera = self.TextCE.get()
+		Texto_Division = self.TextDE.get()
+		Texto_Correo = self.TextCrE.get()
+		Texto_Password = self.TextPE.get()
 		
-#		file = open("DatosUsuario.csv","a")
-#		file.write(Texto_Nombre + ",")
-#		file.write(Texto_Apellido + ",")
-#		file.write(Texto_Edad + ",")
-#		file.write(Texto_Sexo + ",")
-#		file.write(Texto_Carrera + ",")
-#		file.write(Texto_Division + ",")
-#		file.write(Texto_Correo + ",")
-#		file.write(Texto_Password + "\n")
-#		file.close()
+		file = open("DatosUsuario.csv","a")
+		file.write(Texto_Nombre + ",")
+		file.write(Texto_Apellido + ",")
+		file.write(Texto_Edad + ",")
+		file.write(Texto_Sexo + ",")
+		file.write(Texto_Carrera + ",")
+		file.write(Texto_Division + ",")
+		file.write(Texto_Correo + ",")
+		file.write(Texto_Password + "\n")
+		file.close()
 
 		self.Check.config(text="Registro realizado correctamente!",font=("Times New Roman",15),bg="green2")
 		self.Check.place(x=120,y=500)
 
 		self.Check.after(5000,self.OpIni)
 
+class PanelAd():
+	def __init__(self):
+		self.Raiz = Tk()
+		self.Raiz.title("ADMINISTRADOR")
+		self.Raiz.iconbitmap("login.ico")
+		self.x = self.Raiz.winfo_screenwidth()
+		self.y = self.Raiz.winfo_screenheight()
+		self.Raiz.geometry("900x600"+"+"+str(int(self.x/7))+"+"+str(int(self.y/20)))
+		self.Raiz.resizable(0,0)
+		self.Frame = Frame(self.Raiz, width=900, height=600)
+		self.Frame.pack()
+		self.Titulo = Label(self.Frame, text="Panel de Administrador", font=("Times New Roman",45)).place(x=170,y=50)
+		self.Raiz.mainloop()
+
+
 #app = LogIn()
-app = Registro()
+app = PanelAd()
