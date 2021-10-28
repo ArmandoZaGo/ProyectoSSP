@@ -116,58 +116,18 @@ class PanelAd():
 		self.X4 = 0
 		self.Titulo = Label(self.Frame, text="Panel de Administrador", font=("Times New Roman",45)).place(x=170,y=50)
 		self.TP_1 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 1?", font=("Times New Roman",20)).place(x=20,y=170)
-		self.TP_1_BP = Button(self.Frame, text="-", command=self.Inc_1, font=15).place(x=502,y=170)
 		self.TP_1_LI = Label(self.Frame, text=str(self.X1), bg="green2", font=("Times New Roman",17), width=10).place(x=520,y=170)
-		self.TP_1_BM = Button(self.Frame, text="+", command=self.Dec_1, font=15).place(x=650,y=170)
 		self.TP_2 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 2?", font=("Times New Roman",20)).place(x=20,y=230)
-		self.TP_2_BP = Button(self.Frame, text="-", font=15).place(x=502,y=230)
 		self.TP_2_LI = Label(self.Frame, text="0", bg="green2", font=("Times New Roman",17), width=10).place(x=520,y=230)
-		self.TP_2_BM = Button(self.Frame, text="+", font=15).place(x=650,y=230)
 		self.TP_3 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 3?", font=("Times New Roman",20)).place(x=20,y=290)
-		self.TP_3_BP = Button(self.Frame, text="-", font=15).place(x=502,y=290)
 		self.TP_3_LI = Label(self.Frame, text="0", bg="green2", font=("Times New Roman",17), width=10).place(x=520,y=290)
-		self.TP_3_BM = Button(self.Frame, text="+", font=15).place(x=650,y=290)
 		self.TP_4 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 4?", font=("Times New Roman",20)).place(x=20,y=350)
-		self.TP_4_BP = Button(self.Frame, text="-", font=15).place(x=502,y=350)
 		self.TP_4_LI = Label(self.Frame, text="0", bg="green2", font=("Times New Roman",17), width=10).place(x=520,y=350)
-		self.TP_4_BM = Button(self.Frame, text="+", font=15).place(x=650,y=350)
 		self.C_T = Label(self.Frame, text="Seleccionar Carpeta de Imagenes", font=("Times New Roman",20)).place(x=20,y=410)
 		self.C_S = Button(self.Frame, text="Examinar", command=self.Sel_Carpeta, font=("Times New Roman",15)).place(x=400,y=410)
 		self.BReg =  Button(self.Frame, text="Regresar", font=("Times New Roman",15)).place(x=300,y=500)
 		self.GCamb = Button(self.Frame, text="Guardar Cambios", font=("Times New Roman",15)).place(x=400,y=500)
 		self.Raiz.mainloop()
-
-	def Inc_1(self):
-		if self.X1<100:
-			self.X1 += 1
-
-	def Dec_1(self):
-		if self.X1>0:
-			self.X1 -= 1
-	
-	def Inc_2(self):
-		if self.X2<100:
-			self.X2 += 1
-
-	def Dec_2(self):
-		if self.X2>0:
-			self.X2 -= 1
-	
-	def Inc_3(self):
-		if self.X3<100:
-			self.X3 += 1
-
-	def Dec_3(self):
-		if self.X3>0:
-			self.X3 -= 1
-	
-	def Inc_4(self):
-		if self.X4<100:
-			self.X4 += 1
-
-	def Dec_1(self):
-		if self.X4>0:
-			self.X4 -= 1
 	
 	def Sel_Carpeta(self):
 		folder = filedialog.askdirectory()
