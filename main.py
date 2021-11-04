@@ -200,9 +200,20 @@ class PanelAd():
 class Pantalla_1():
 	def __init__(self):
 		self.P1 = Tk()
+		self.P1.title("PANTALLA 1")
+		self.P1.iconbitmap("login.ico")
+		self.x = self.P1.winfo_screenwidth()
+		self.y = self.P1.winfo_screenheight()
+		self.P1.geometry("900x600"+"+"+str(int(self.x/7))+"+"+str(int(self.y/20)))
+		self.P1.resizable(0,0)
+		self.Frame = Frame(self.P1, width=900, height=600)
+		self.Frame.pack()
+		self.Img_1_G = PhotoImage(file="Comida/Agua.png")
+		self.Img_1 = Button(self.Frame, image=self.Img_1_G).place(x=100,y=150)
 		self.P1.mainloop()
 
 
-app = LogIn()
+#app = LogIn()
 #app = Registro()
 #app = PanelAd()
+app = Pantalla_1()
