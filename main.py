@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk, filedialog
 from os import remove
 import pandas as pd
+from PIL import Image, ImageTk
+import random
 
 
 class LogIn():
@@ -26,7 +28,7 @@ class LogIn():
 		self.ContraE.place(width=300,height=30,x=80,y=390)
 		self.RegistroL = Label(self.Frame, text="No tienes una cuenta aun?",font=("Times New Roman",14)).place(x=80,y=490)
 		self.RegistroB = Button(self.Frame, text="Registrarse", command=self.OpReg, font=("Times New Roman",12)).place(x=290,y=485)
-		self.Enviar = Button(self.Frame, text="Enviar", command=self.Check, font=("Times New Roman",14)).place(x=90,y=430)
+		self.Enviar = Button(self.Frame, text="Enviar", command=self.Run, font=("Times New Roman",14)).place(x=90,y=430)
 		self.Reintentar = Button(self.Frame, text="Reintentar", command=self.Clave, font=("Times New Roman",14)).place(x=160,y=430)
 		self.Linea = Canvas(width=10,height=550,bg="blue").place(x=600,y=20)
 		self.AdvertenciaC = Label(self.Frame)
@@ -36,6 +38,10 @@ class LogIn():
 	def OpReg(self):
 		self.Raiz.destroy()
 		Open = Registro()
+
+	def Run(self):
+		self.IniSe.destroy()
+		Open = Pantalla_1()
 
 	def Check(self):
 		Correo = self.EAdress.get()
@@ -208,12 +214,42 @@ class Pantalla_1():
 		self.P1.resizable(0,0)
 		self.Frame = Frame(self.P1, width=900, height=600)
 		self.Frame.pack()
-		self.Img_1_G = PhotoImage(file="Comida/Agua.png")
-		self.Img_1 = Button(self.Frame, image=self.Img_1_G).place(x=100,y=150)
+		self.B1 = Button(self.Frame)
+		self.B2 = Button(self.Frame)
+		self.B3 = Button(self.Frame)
+		self.B4 = Button(self.Frame)
+		self.BB = Button(self.Frame, command=self.Asing_Img).place(x=20,y=30)
 		self.P1.mainloop()
 
+	def Asing_Img(self):
+		df = pd.read_csv("C:/Users/zarat/Desktop/ProyectoSSP/Comida.csv")
+		L = []
+		for i in range(len(df)):
+			i=i+1
+			L.append(i)
+			random.shuffle(L)
 
-#app = LogIn()
+		self.PImg1 = Image.open("Comida/" + str(L[0]) + ".png")
+		self.Img1 = ImageTk.PhotoImage(self.PImg1)
+		self.B1.config(image=self.Img1)
+		self.B1.place(x=80,y=20)
+
+		self.PImg2 = Image.open("Comida/" + str(L[1]) + ".png")
+		self.Img2 = ImageTk.PhotoImage(self.PImg2)
+		self.B2.config(image=self.Img2)
+		self.B2.place(x=300,y=20)
+
+		self.PImg3 = Image.open("Comida/" + str(L[2]) + ".png")
+		self.Img3 = ImageTk.PhotoImage(self.PImg3)
+		self.B3.config(image=self.Img3)
+		self.B3.place(x=80,y=150)
+
+		self.PImg4 = Image.open("Comida/" + str(L[3]) + ".png")
+		self.Img4 = ImageTk.PhotoImage(self.PImg4)
+		self.B4.config(image=self.Img4)
+		self.B4.place(x=300,y=150)
+
+app = LogIn()
 #app = Registro()
 #app = PanelAd()
-app = Pantalla_1()
+#app = Pantalla_1()
