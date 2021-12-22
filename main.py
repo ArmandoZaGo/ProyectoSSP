@@ -218,7 +218,7 @@ class Pantalla_1():
 		self.B2 = Button(self.Frame)
 		self.B3 = Button(self.Frame)
 		self.B4 = Button(self.Frame)
-		self.BB = Button(self.Frame, command=self.Asing_Img).place(x=20,y=30)
+		self.BB = Button(self.Frame, command=self.Asing_Img, text="¿Qué prefieres para comer en las mañanas?", font=("Times New Roman",35)).place(x=20,y=30)
 		self.P1.mainloop()
 
 	def Asing_Img(self):
@@ -232,24 +232,24 @@ class Pantalla_1():
 		self.PImg1 = Image.open("Comida/" + str(L[0]) + ".png")
 		self.Img1 = ImageTk.PhotoImage(self.PImg1)
 		self.B1.config(image=self.Img1)
-		self.B1.place(x=80,y=20)
+		self.B1.place(x=80,y=150)
 
 		self.PImg2 = Image.open("Comida/" + str(L[1]) + ".png")
 		self.Img2 = ImageTk.PhotoImage(self.PImg2)
 		self.B2.config(image=self.Img2)
-		self.B2.place(x=300,y=20)
+		self.B2.place(x=460,y=150)
 
 		self.PImg3 = Image.open("Comida/" + str(L[2]) + ".png")
 		self.Img3 = ImageTk.PhotoImage(self.PImg3)
 		self.B3.config(image=self.Img3)
-		self.B3.place(x=80,y=150)
+		self.B3.place(x=80,y=370)
 
 		self.PImg4 = Image.open("Comida/" + str(L[3]) + ".png")
 		self.Img4 = ImageTk.PhotoImage(self.PImg4)
 		self.B4.config(image=self.Img4)
-		self.B4.place(x=300,y=150)
+		self.B4.place(x=460,y=370)
 
-app = LogIn()
+#app = LogIn()
 #app = Registro()
 #app = PanelAd()
-#app = Pantalla_1()
+app = Pantalla_1()
