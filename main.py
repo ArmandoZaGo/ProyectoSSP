@@ -169,6 +169,8 @@ class PanelAd():
 		self.Pt2 = StringVar()
 		self.Pt3 = StringVar()
 		self.Pt4 = StringVar() 
+		self.var = StringVar(self.Frame)
+		self.Opciones = ["Comida"]
 		self.Titulo = Label(self.Frame, text="Panel de Administrador", font=("Times New Roman",45)).place(x=170,y=50)
 		self.TP_1 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 1?", font=("Times New Roman",20)).place(x=20,y=170)
 		self.TP_1_E = Entry(self.Frame, textvariable=self.Pt1, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=175)
@@ -179,24 +181,22 @@ class PanelAd():
 		self.TP_4 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 4?", font=("Times New Roman",20)).place(x=20,y=350)
 		self.TP_4_E = Entry(self.Frame, textvariable=self.Pt4, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=355)
 		self.C_T = Label(self.Frame, text="Seleccionar Carpeta de Imagenes", font=("Times New Roman",20)).place(x=20,y=410)
-		self.C_S = Button(self.Frame, text="Examinar", command=self.Sel_Carpeta, font=("Times New Roman",15)).place(x=400,y=410)
+		self.C_S = OptionMenu(self.Frame, self.var, *self.Opciones)
+		self.C_S.place(x=390,y=410)
+		self.C_S.config(font=("Times New Roman",15))
 		self.BReg =  Button(self.Frame, text="Regresar", font=("Times New Roman",15)).place(x=300,y=500)
 		self.GCamb = Button(self.Frame, text="Guardar Cambios", command=self.GCambios, font=("Times New Roman",15)).place(x=400,y=500)
-		self.Raiz.mainloop()
-	
-	def Sel_Carpeta(self):
-		remove("DatosAdmin.csv")
-		folder = filedialog.askdirectory()
-		file = open("DatosAdmin.csv","a")
-		file.write(folder + ",")
-		file.close()	
+		self.Raiz.mainloop()	
 	
 	def GCambios(self):
+		remove("DatosAdmin.csv")
+		Carpeta = self.var.get()
 		Pantalla_1 = self.Pt1.get()
 		Pantalla_2 = self.Pt2.get()
 		Pantalla_3 = self.Pt3.get()
 		Pantalla_4 = self.Pt4.get()
 		file = open("DatosAdmin.csv","a")
+		file.write(Carpeta + ",")
 		file.write(Pantalla_1 + ",")
 		file.write(Pantalla_2 + ",")
 		file.write(Pantalla_3 + ",")
@@ -218,10 +218,10 @@ class Pantalla_1():
 		self.B2 = Button(self.Frame)
 		self.B3 = Button(self.Frame)
 		self.B4 = Button(self.Frame)
-		self.BB = Button(self.Frame, command=self.Asing_Img, text="¿Qué prefieres para comer en las mañanas?", font=("Times New Roman",35)).place(x=20,y=30)
+		self.BB = Button(self.Frame, command=self.Asign_Img, text="En estos momentos, ¿qué elegirías?", font=("Times New Roman",35)).place(x=100,y=30)
 		self.P1.mainloop()
 
-	def Asing_Img(self):
+	def Asign_Img(self):
 		df = pd.read_csv("C:/Users/zarat/Desktop/ProyectoSSP/Comida.csv")
 		L = []
 		for i in range(len(df)):
@@ -249,7 +249,42 @@ class Pantalla_1():
 		self.B4.config(image=self.Img4)
 		self.B4.place(x=460,y=370)
 
+class Pantalla_2():
+	def __init__(self):
+		self.P2 = Tk()
+		self.P2.title("PANTALLA 2")
+		self.P2.iconbitmap("login.ico")
+		self.x = self.P2.winfo_screenwidth()
+		self.y = self.P2.winfo_screenheight()
+		self.P2.geometry("900x600"+"+"+str(int(self.x/7))+"+"+str(int(self.y/20)))
+		self.P2.resizable(0,0)
+		self.Frame = Frame(self.P2, width=900, height=600)
+		self.Frame.pack()
+		self.B1 = Button(self.Frame)
+		self.B2 = Button(self.Frame)
+		self.vs = Label(self.Frame, text="VS", font=("Times New Roman",40), bg="green").place(x=415,y=310)
+		self.BB = Button(self.Frame, command=self.Asign_Img, text="De las siguientes opciones, ¿qué prefieres?", font=("Times New Roman",35)).place(x=28,y=30)
+		self.P2.mainloop()
+	
+	def Asign_Img(self):
+		df = pd.read_csv("C:/Users/zarat/Desktop/ProyectoSSP/Comida.csv")
+		L = []
+		for i in range(len(df)):
+			i=i+1
+			L.append(i)
+			random.shuffle(L)
+
+		self.PImg1 = Image.open("Comida/" + str(L[0]) + ".png")
+		self.Img1 = ImageTk.PhotoImage(self.PImg1)
+		self.B1.config(image=self.Img1)
+		self.B1.place(x=40,y=250)
+
+		self.PImg2 = Image.open("Comida/" + str(L[1]) + ".png")
+		self.Img2 = ImageTk.PhotoImage(self.PImg2)
+		self.B2.config(image=self.Img2)
+		self.B2.place(x=506,y=250)
+
 #app = LogIn()
 #app = Registro()
-#app = PanelAd()
-app = Pantalla_1()
+app = PanelAd()
+#app = Pantalla_2()
