@@ -4,6 +4,7 @@ from os import remove
 import pandas as pd
 from PIL import Image, ImageTk
 import random
+import datetime
 
 
 class LogIn():
@@ -28,36 +29,79 @@ class LogIn():
 		self.ContraE.place(width=300,height=30,x=80,y=390)
 		self.RegistroL = Label(self.Frame, text="No tienes una cuenta aun?",font=("Times New Roman",14)).place(x=80,y=490)
 		self.RegistroB = Button(self.Frame, text="Registrarse", command=self.OpReg, font=("Times New Roman",12)).place(x=290,y=485)
-		self.Enviar = Button(self.Frame, text="Enviar", command=self.Run, font=("Times New Roman",14)).place(x=90,y=430)
+		self.Enviar = Button(self.Frame, text="Enviar", command=self.Check, font=("Times New Roman",14)).place(x=90,y=430)
 		self.Reintentar = Button(self.Frame, text="Reintentar", command=self.Clave, font=("Times New Roman",14)).place(x=160,y=430)
+		self.Admin = Button(self.Frame, text="Administrador", command=self.Admin_Check, font=("Times New Roman",14)).place(x=260,y=430)
 		self.Linea = Canvas(width=10,height=550,bg="blue").place(x=600,y=20)
 		self.AdvertenciaC = Label(self.Frame)
 		self.AdvertenciaP = Label(self.Frame)
 		self.IniSe.mainloop()
 
 	def OpReg(self):
-		self.Raiz.destroy()
-		Open = Registro()
-
-	def Run(self):
 		self.IniSe.destroy()
-		Open = Pantalla_1()
+		Open = Registro()
+	
+	def Admin_Check(self):
+		self.IniSe.destroy()
 
-	def Check(self):
 		Correo = self.EAdress.get()
 		Pass = self.Password.get()
+		if Correo == "admin":
+			if Pass == "admin":
+				app = PanelAd()
+
+
+	def Check(self):
+		date = datetime.datetime.now()
+		Valor = date.strftime('%d/%m/%Y,%H:%M:%S')
+
+		archivo = open("Historial.csv","a")
+		archivo.write("\n")
+		archivo.write(Valor + ",")
+		archivo.close()
+
+		df = pd.read_csv("DatosAdmin.csv")
+		i = int(df.Pantalla_1[0])
+		j = int(df.Pantalla_2[0])
+
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(df.Carpeta[0] + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		Correo = self.EAdress.get()
+		Pass = self.Password.get()
+		print(Correo)
+		print(Pass)
 		Lista_Correo = []
 		Lista_Password = []
 		df = pd.read_csv("DatosUsuario.csv")
 
 		for i in range(len(df.index)):
+			if Correo == str(df.Correo[i]):
+				k = i
+
+		archivo = open("Historial.csv","a")
+		archivo.write(df.Nombre[k] + ",")
+		archivo.write(df.Apellidos[k] + ",")
+		archivo.write(df.Correo[k])
+		archivo.close()
+
+		for i in range(len(df.index)):
 			Lista_Correo.append(df.Correo[i])
 			Lista_Password.append(df.Password[i])
+			print(Lista_Password[i])
 
 		if Correo in Lista_Correo:
-			if Pass in Lista_Password:
+			print(str(Pass) in str(Lista_Password))
+			if str(Pass) in str(Lista_Password):
 				self.IniSe.destroy()
-				Pantalla = Pantalla_1()
+				app = Call_Func().Call()
 			else:
 				self.AdvertenciaL(2)
 		else:
@@ -74,10 +118,8 @@ class LogIn():
 			self.AdvertenciaP.config(text="Contraseña no encontrada. Intente de nuevo o registrese", font=("Times New Roman",15), bg="red")
 			self.AdvertenciaP.place(x=80,y=540)
 		else:
-			self.AdvertenciaC.destroy()
-			self.AdvertenciaP.destroy()
-			self.CorreoE.delete(0,END)
-			self.ContraE.delete(0,END)
+			self.IniSe.destroy()
+			pp = LogIn()
 
 class Registro():
 	def __init__(self):
@@ -184,7 +226,7 @@ class PanelAd():
 		self.C_S = OptionMenu(self.Frame, self.var, *self.Opciones)
 		self.C_S.place(x=390,y=410)
 		self.C_S.config(font=("Times New Roman",15))
-		self.BReg =  Button(self.Frame, text="Regresar", font=("Times New Roman",15)).place(x=300,y=500)
+		self.BReg =  Button(self.Frame, text="Regresar", command=self.Return,  font=("Times New Roman",15)).place(x=300,y=500)
 		self.GCamb = Button(self.Frame, text="Guardar Cambios", command=self.GCambios, font=("Times New Roman",15)).place(x=400,y=500)
 		self.Raiz.mainloop()	
 	
@@ -196,12 +238,17 @@ class PanelAd():
 		Pantalla_3 = self.Pt3.get()
 		Pantalla_4 = self.Pt4.get()
 		file = open("DatosAdmin.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
 		file.write(Carpeta + ",")
 		file.write(Pantalla_1 + ",")
-		file.write(Pantalla_2 + ",")
-		file.write(Pantalla_3 + ",")
-		file.write(Pantalla_4 + "\n")
+		file.write(Pantalla_2 + "\n")
 		file.close()	
+	
+	def Return(self):
+		self.Raiz.destroy()
+		app = LogIn()
 
 class Pantalla_1():
 	def __init__(self):
@@ -214,40 +261,193 @@ class Pantalla_1():
 		self.P1.resizable(0,0)
 		self.Frame = Frame(self.P1, width=900, height=600)
 		self.Frame.pack()
-		self.B1 = Button(self.Frame)
-		self.B2 = Button(self.Frame)
-		self.B3 = Button(self.Frame)
-		self.B4 = Button(self.Frame)
+		self.B1 = Button(self.Frame, command=self.BT1)
+		self.B2 = Button(self.Frame, command=self.BT2)
+		self.B3 = Button(self.Frame, command=self.BT3)
+		self.B4 = Button(self.Frame, command=self.BT4)
 		self.BB = Button(self.Frame, command=self.Asign_Img, text="En estos momentos, ¿qué elegirías?", font=("Times New Roman",35)).place(x=100,y=30)
 		self.P1.mainloop()
 
 	def Asign_Img(self):
-		df = pd.read_csv("C:/Users/zarat/Desktop/ProyectoSSP/Comida.csv")
+		df = pd.read_csv("Comida.csv")
+		df_DA = pd.read_csv("DatosAdmin.csv")
 		L = []
 		for i in range(len(df)):
 			i=i+1
 			L.append(i)
 			random.shuffle(L)
 
-		self.PImg1 = Image.open("Comida/" + str(L[0]) + ".png")
+		esc = open("Auxi.csv","a")
+		esc.write("Imagen1" + ",")
+		esc.write("Imagen2" + ",")
+		esc.write("Imagen3" + ",")
+		esc.write("Imagen4" + "\n")
+		esc.close()
+
+		print(L)
+		self.PImg1 = Image.open(df_DA.Carpeta[0] + "/" + str(L[0]) + ".png")
 		self.Img1 = ImageTk.PhotoImage(self.PImg1)
 		self.B1.config(image=self.Img1)
 		self.B1.place(x=80,y=150)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[0]) + ",")
+		esc.close()
 
-		self.PImg2 = Image.open("Comida/" + str(L[1]) + ".png")
+		self.PImg2 = Image.open(df_DA.Carpeta[0] + "/" + str(L[1]) + ".png")
 		self.Img2 = ImageTk.PhotoImage(self.PImg2)
 		self.B2.config(image=self.Img2)
 		self.B2.place(x=460,y=150)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[1]) + ",")
+		esc.close()
 
-		self.PImg3 = Image.open("Comida/" + str(L[2]) + ".png")
+		self.PImg3 = Image.open(df_DA.Carpeta[0] + "/" + str(L[2]) + ".png")
 		self.Img3 = ImageTk.PhotoImage(self.PImg3)
 		self.B3.config(image=self.Img3)
 		self.B3.place(x=80,y=370)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[2]) + ",")
+		esc.close()
 
-		self.PImg4 = Image.open("Comida/" + str(L[3]) + ".png")
+		self.PImg4 = Image.open(df_DA.Carpeta[0] + "/" + str(L[3]) + ".png")
 		self.Img4 = ImageTk.PhotoImage(self.PImg4)
 		self.B4.config(image=self.Img4)
 		self.B4.place(x=460,y=370)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[3]) + "\n")
+		esc.close()
+
+	def BT1(self):
+		self.P1.destroy()
+
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen1[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_1:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		i -= 1
+		j = int(df.Pantalla_2[0])
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
+	
+	def BT2(self):
+		self.P1.destroy()
+
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen2[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_1:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		i -= 1
+		j = int(df.Pantalla_2[0])
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
+
+	def BT3(self):
+		self.P1.destroy()
+
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen3[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_1:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		i -= 1
+		j = int(df.Pantalla_2[0])
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
+
+	def BT4(self):
+		self.P1.destroy()
+
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen4[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_1:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		i -= 1
+		j = int(df.Pantalla_2[0])
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
 
 class Pantalla_2():
 	def __init__(self):
@@ -260,31 +460,125 @@ class Pantalla_2():
 		self.P2.resizable(0,0)
 		self.Frame = Frame(self.P2, width=900, height=600)
 		self.Frame.pack()
-		self.B1 = Button(self.Frame)
-		self.B2 = Button(self.Frame)
+		self.B1 = Button(self.Frame, command=self.BT1)
+		self.B2 = Button(self.Frame, command=self.BT2)
 		self.vs = Label(self.Frame, text="VS", font=("Times New Roman",40), bg="green").place(x=415,y=310)
 		self.BB = Button(self.Frame, command=self.Asign_Img, text="De las siguientes opciones, ¿qué prefieres?", font=("Times New Roman",35)).place(x=28,y=30)
 		self.P2.mainloop()
 	
 	def Asign_Img(self):
-		df = pd.read_csv("C:/Users/zarat/Desktop/ProyectoSSP/Comida.csv")
+		df = pd.read_csv("Comida.csv")
+		df_DA = pd.read_csv("DatosAdmin.csv")
 		L = []
 		for i in range(len(df)):
 			i=i+1
 			L.append(i)
 			random.shuffle(L)
 
-		self.PImg1 = Image.open("Comida/" + str(L[0]) + ".png")
+		esc = open("Auxi.csv","a")
+		esc.write("Imagen1" + ",")
+		esc.write("Imagen2" + "\n")
+		esc.close()
+
+		self.PImg1 = Image.open(df_DA.Carpeta[0] + "/" + str(L[0]) + ".png")
 		self.Img1 = ImageTk.PhotoImage(self.PImg1)
 		self.B1.config(image=self.Img1)
 		self.B1.place(x=40,y=250)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[0]) + ",")
+		esc.close()
 
-		self.PImg2 = Image.open("Comida/" + str(L[1]) + ".png")
+		self.PImg2 = Image.open(df_DA.Carpeta[0] + "/" + str(L[1]) + ".png")
 		self.Img2 = ImageTk.PhotoImage(self.PImg2)
 		self.B2.config(image=self.Img2)
 		self.B2.place(x=506,y=250)
+		esc = open("Auxi.csv","a")
+		esc.write(str(L[1]) + "\n")
+		esc.close()
+	
+	def BT1(self):
+		self.P2.destroy()
 
-#app = LogIn()
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen1[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_2:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		j = int(df.Pantalla_2[0])
+		j -= 1
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
+	
+	def BT2(self):
+		self.P2.destroy()
+
+		da = pd.read_csv("Auxi.csv")
+		i = int(da.Imagen2[0])
+		i -= 1
+		de = pd.read_csv("Comida.csv")
+
+		new = open("Historial.csv","a")
+		new.write("," + "P_2:" + de.Comida[i])
+		new.close()
+
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		j = int(df.Pantalla_2[0])
+		j -= 1
+
+		Carpeta = df.Carpeta[0]
+		remove("CopiaDA.csv")
+		file = open("CopiaDA.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(str(i) + ",")
+		file.write(str(j) + "\n")
+		file.close()
+
+		remove("Auxi.csv")
+
+		app = Call_Func()
+		app.Call()
+
+class Call_Func():
+	
+	def Call(self):
+		df = pd.read_csv("CopiaDA.csv")
+		i = int(df.Pantalla_1[0])
+		j = int(df.Pantalla_2[0])
+
+		if i > 0 or j > 0:
+			numero = random.randint(1,2)
+			if numero == 1 and i > 0:
+				app = Pantalla_1()
+			else:
+				app = Pantalla_2()
+
+app = LogIn()
 #app = Registro()
-app = PanelAd()
-#app = Pantalla_2()
+#app = PanelAd()
+#app = Pantalla_1()
+#app = Call_Func().Call()
+#app.Call()
