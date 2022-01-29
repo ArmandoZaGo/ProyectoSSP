@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image, ImageTk
 import random
 import datetime
-
+import re
 
 class LogIn():
 	def __init__(self):
@@ -85,27 +85,28 @@ class LogIn():
 		for i in range(len(df.index)):
 			if Correo == str(df.Correo[i]):
 				k = i
-
-		archivo = open("Historial.csv","a")
-		archivo.write(df.Nombre[k] + ",")
-		archivo.write(df.Apellidos[k] + ",")
-		archivo.write(df.Correo[k])
-		archivo.close()
+			else:
+				k = 0
 
 		for i in range(len(df.index)):
 			Lista_Correo.append(df.Correo[i])
 			Lista_Password.append(df.Password[i])
 			print(Lista_Password[i])
 
-		if Correo in Lista_Correo:
-			print(str(Pass) in str(Lista_Password))
-			if str(Pass) in str(Lista_Password):
-				self.IniSe.destroy()
-				app = Call_Func().Call()
+		for i in range(len(Lista_Correo)):
+			if str(Correo) == Lista_Correo[i]:
+				if str(Pass) == str(Lista_Password[i]):
+					self.IniSe.destroy()
+					archivo = open("Historial.csv","a")
+					archivo.write(df.Nombre[k] + ",")
+					archivo.write(df.Apellidos[k] + ",")
+					archivo.write(df.Correo[k])
+					archivo.close()
+					app = Call_Func().Call()
+				else:
+					self.AdvertenciaL(2)
 			else:
-				self.AdvertenciaL(2)
-		else:
-			self.AdvertenciaL(1)
+				self.AdvertenciaL(1)
 
 	def Clave(self):
 		self.AdvertenciaL(3)
@@ -210,21 +211,20 @@ class PanelAd():
 		self.Pt1 = StringVar()
 		self.Pt2 = StringVar()
 		self.Pt3 = StringVar()
-		self.Pt4 = StringVar() 
 		self.var = StringVar(self.Frame)
 		self.Opciones = ["Comida"]
 		self.Titulo = Label(self.Frame, text="Panel de Administrador", font=("Times New Roman",45)).place(x=170,y=50)
 		self.TP_1 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 1?", font=("Times New Roman",20)).place(x=20,y=170)
 		self.TP_1_E = Entry(self.Frame, textvariable=self.Pt1, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=175)
-		self.TP_2 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 2?", font=("Times New Roman",20)).place(x=20,y=230)
-		self.TP_2_E = Entry(self.Frame, textvariable=self.Pt2, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=235)
-		self.TP_3 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 3?", font=("Times New Roman",20)).place(x=20,y=290)
-		self.TP_3_E = Entry(self.Frame, textvariable=self.Pt3, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=295)
-		self.TP_4 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 4?", font=("Times New Roman",20)).place(x=20,y=350)
-		self.TP_4_E = Entry(self.Frame, textvariable=self.Pt4, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=355)
-		self.C_T = Label(self.Frame, text="Seleccionar Carpeta de Imagenes", font=("Times New Roman",20)).place(x=20,y=410)
+		self.TP_2 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 2?", font=("Times New Roman",20)).place(x=20,y=240)
+		self.TP_2_E = Entry(self.Frame, textvariable=self.Pt2, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=245)
+		self.TP_4 = Label(self.Frame, text="Preguntas (Pantalla 3)", font=("Times New Roman",20)).place(x=230,y=310)
+		self.TP_4_E = Entry(self.Frame, textvariable=self.Pt3, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=315)
+		self.Inst = Label(self.Frame, text="Ingrese cada una de las preguntas a evaluar en el siguiente", font=("Times New Roman",10), bg="yellow").place(x=155,y=350)
+		self.Inst_2 = Label(self.Frame, text="recuadro separando por espacios en blanco cada una de ellas", font=("Times New Roman",10), bg="yellow").place(x=142,y=370)
+		self.C_T = Label(self.Frame, text="Seleccionar Carpeta de Imagenes", font=("Times New Roman",20)).place(x=20,y=420)
 		self.C_S = OptionMenu(self.Frame, self.var, *self.Opciones)
-		self.C_S.place(x=390,y=410)
+		self.C_S.place(x=390,y=420)
 		self.C_S.config(font=("Times New Roman",15))
 		self.BReg =  Button(self.Frame, text="Regresar", command=self.Return,  font=("Times New Roman",15)).place(x=300,y=500)
 		self.GCamb = Button(self.Frame, text="Guardar Cambios", command=self.GCambios, font=("Times New Roman",15)).place(x=400,y=500)
@@ -236,7 +236,8 @@ class PanelAd():
 		Pantalla_1 = self.Pt1.get()
 		Pantalla_2 = self.Pt2.get()
 		Pantalla_3 = self.Pt3.get()
-		Pantalla_4 = self.Pt4.get()
+		print(Pantalla_3)
+		Lista_p3 = re.split(",",Pantalla_3)
 		file = open("DatosAdmin.csv","a")
 		file.write("Carpeta" + ",")
 		file.write("Pantalla_1" + ",")
@@ -244,7 +245,46 @@ class PanelAd():
 		file.write(Carpeta + ",")
 		file.write(Pantalla_1 + ",")
 		file.write(Pantalla_2 + "\n")
-		file.close()	
+		file.close()
+
+		remove("Preguntas_P3.csv")
+		for i in range(len(Lista_p3)):
+			if i == len(Lista_p3)-1:
+				file = open("Preguntas_P3.csv","a")
+				file.write("Pregunta" + str(i+1))
+				file.close()
+			else:
+				file = open("Preguntas_P3.csv","a")
+				file.write("Pregunta" + str(i+1) + ",")
+				file.close()
+		file = open("Preguntas_P3.csv","a")
+		file.write("\n")
+		file.close()
+
+		for i in range(len(Lista_p3)):
+			if i == len(Lista_p3)-1:
+				file = open("Preguntas_P3.csv","a")
+				file.write(Lista_p3[i])
+				file.close()
+			else:
+				file = open("Preguntas_P3.csv","a")
+				file.write(Lista_p3[i] + ",")
+				file.close()
+		file = open("Preguntas_P3.csv","a")
+		file.write("\n")
+		file.close()
+
+		remove("NumPe.csv")
+		if Pantalla_3 == "":
+			file = open("NumPe.csv","a")
+			file.write("Numero" + ",")
+			file.write("\n" + "0" + ",")
+			file.close()
+		else:
+			file = open("NumPe.csv","a")
+			file.write("Numero" + ",")
+			file.write("\n" + "1" + ",")
+			file.close()
 	
 	def Return(self):
 		self.Raiz.destroy()
@@ -265,7 +305,7 @@ class Pantalla_1():
 		self.B2 = Button(self.Frame, command=self.BT2)
 		self.B3 = Button(self.Frame, command=self.BT3)
 		self.B4 = Button(self.Frame, command=self.BT4)
-		self.BB = Button(self.Frame, command=self.Asign_Img, text="En estos momentos, ¿qué elegirías?", font=("Times New Roman",35)).place(x=100,y=30)
+		self.BB = Button(self.Frame, command=self.Asign_Img, text="¿Qué eliges?", font=("Times New Roman",35)).place(x=100,y=30)
 		self.P1.mainloop()
 
 	def Asign_Img(self):
@@ -562,6 +602,71 @@ class Pantalla_2():
 		app = Call_Func()
 		app.Call()
 
+class Pantalla_3():
+	def __init__(self):
+		self.P3 = Tk()
+		self.P3.title("PANTALLA 3")
+		self.P3.iconbitmap("login.ico")
+		self.x = self.P3.winfo_screenwidth()
+		self.y = self.P3.winfo_screenheight()
+		self.P3.geometry("900x600"+"+"+str(int(self.x/7))+"+"+str(int(self.y/20)))
+		self.P3.resizable(0,0)
+		self.Frame = Frame(self.P3, width=900, height=600)
+		self.Frame.pack()
+		self.B1 = Button(self.Frame, text="SI", font=("Times New Roman",40), command=self.Positiva).place(x=200,y=350, width=200, height=80)
+		self.B2 = Button(self.Frame, text="NO", font=("Times New Roman",40), command=self.Negativa).place(x=500,y=350, width=200, height=80)
+		self.B3 = Button(self.Frame, text="Mostrar Pregunta", font=("Times New Roman",20), command=self.Most_Preg).place(x=340,y=50)
+		self.Pregunta = Label(self.Frame)
+		self.P3.mainloop()
+	
+	def Most_Preg(self):
+		ds = pd.read_csv("AuxPre.csv")
+
+		df = pd.read_csv("Preguntas_P3.csv")
+		i = int(ds.Numero[0])
+		
+		if i > 0 and i <= len(df.axes[1]):
+			self.Pregunta.config(text=df.iloc[0]["Pregunta"+str(i)], bg="green", font=("Times New Roman",40))
+			self.Pregunta.place(x=48,y=120,width=800,height=70)
+
+	def Positiva(self):
+		ds = pd.read_csv("AuxPre.csv")
+		i = int(ds.Numero[0])
+		df = pd.read_csv("Preguntas_P3.csv")
+		new = open("Historial.csv","a")
+		new.write("," + df.iloc[0]["Pregunta"+str(i)] + ": " + "SI")
+		new.close()
+
+		remove("AuxPre.csv")
+		file = open("AuxPre.csv","a")
+		file.write("Numero"+",")
+		file.write("\n" + str(i+1) + ",")
+		file.close()
+
+		self.P3.destroy()
+
+		if i <= len(df.axes[1])-1:
+			app = Pantalla_3()
+
+	def Negativa(self):
+		ds = pd.read_csv("AuxPre.csv")
+		i = int(ds.Numero[0])
+		df = pd.read_csv("Preguntas_P3.csv")
+		new = open("Historial.csv","a")
+		new.write("," + df.iloc[0]["Pregunta"+str(i)] + ": " + "NO")
+		new.close()
+
+		remove("AuxPre.csv")
+		file = open("AuxPre.csv","a")
+		file.write("Numero"+",")
+		file.write("\n" + str(i+1) + ",")
+		file.close()
+		
+		self.P3.destroy()
+
+		if i <= len(df.axes[1])-1:
+			app = Pantalla_3()
+
 class Call_Func():
 	
 	def Call(self):
@@ -575,6 +680,14 @@ class Call_Func():
 				app = Pantalla_1()
 			else:
 				app = Pantalla_2()
+		else:
+			remove("AuxPre.csv")
+			dr = pd.read_csv("NumPe.csv")
+			file = open("AuxPre.csv","a")
+			file.write("Numero"+",")
+			file.write("\n" + str(dr.Numero[0]) + ",")
+			file.close()
+			app = Pantalla_3()
 
 app = LogIn()
 #app = Registro()
@@ -582,3 +695,7 @@ app = LogIn()
 #app = Pantalla_1()
 #app = Call_Func().Call()
 #app.Call()
+#app =  Pantalla_3()
+
+#df = pd.read_csv("Historial.csv")
+#print(df.Fecha["07/01/2022"])
