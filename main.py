@@ -142,28 +142,36 @@ class Registro():
 		self.TextCrE = StringVar()
 		self.TextPE = StringVar()
 		self.var = StringVar(self.FrameR)
-		self.Opciones = ["Campus Guanajato","Campus Irapuato-Salamanca","Campus Celaya-Salvatierra","Campus León","Colegio Nivel Medio Superior"]
+		self.div = StringVar(self.FrameR)
+		self.OpcionesCamp = ["Campus Guanajato","Campus Irapuato-Salamanca","Campus Celaya-Salvatierra","Campus León","Colegio Nivel Medio Superior"]
+		self.OpcionesDiv_1 = ["Division de Arquitectura, Arte y Diseño", "Division de Ciencias Economico - Administrativas", "Division de Ciencias Naturales y Exactas", "Division de Ciencias Sociales y humanidades", "Division de Derecho, Politica y Gobierno", "Division de Ingenierias"]
+		self.OpcionesDiv_2 = ["Division de Ciencias de la Vida", "Division de Ingenierias"]
+		self.OpcionesDiv_3 = ["Division de Ciencias de la Salud e Ingenierias", "Division de Ciencias Sociales y Administrativas"]
+		self.OpcionesDiv_4 = ["Division de Ciencias e Ingenierias", "Division de Ciencias de la Salud", "Division de Ciencias Sociales y Humanidades"]
 		self.TextRe =  Label(self.FrameR, text="USUARIO",font=("Times New Roman",45)).place(x=300,y=60)
-		self.Nombre = Label(self.FrameR, text="Nombre:", font=("Times New Roman",18)).place(x=100,y=160)
-		self.NombreE = Entry(self.FrameR, textvariable=self.TextNE, font=("Times New Roman",14)).place(width=300,height=30,x=105,y=200)
-		self.Apellido = Label(self.FrameR, text="Apellido:", font=("Times New Roman",18)).place(x=100,y=240)
-		self.ApellidoE = Entry(self.FrameR, textvariable=self.TextAE, font=("Times New Roman",14)).place(width=300,height=30,x=105,y=280)
-		self.Edad = Label(self.FrameR, text="Edad:", font=("Times New Roman",18)).place(x=100,y=320)
-		self.EdadE = Entry(self.FrameR, textvariable=self.TextEE,font=("Times New Roman",14)).place(width=300,height=30,x=105,y=360)
-		self.Sexo = Label(self.FrameR, text="Sexo:", font=("Times New Roman",18)).place(x=100,y=400)
-		self.SexoE = Entry(self.FrameR, textvariable=self.TextSE,font=("Times New Roman",14)).place(width=300,height=30,x=105,y=440)
-		self.Carrera = Label(self.FrameR, text="Carrera:", font=("Times New Roman",18)).place(x=500,y=160)
-		self.CarreraE = Entry(self.FrameR, textvariable=self.TextCE,font=("Times New Roman",14)).place(width=300,height=30,x=505,y=200)
+		self.Nombre = Label(self.FrameR, text="Nombre:", font=("Times New Roman",18)).place(x=100,y=150)
+		self.NombreE = Entry(self.FrameR, textvariable=self.TextNE, font=("Times New Roman",14)).place(width=300,height=30,x=105,y=190)
+		self.Apellido = Label(self.FrameR, text="Apellido:", font=("Times New Roman",18)).place(x=100,y=230)
+		self.ApellidoE = Entry(self.FrameR, textvariable=self.TextAE, font=("Times New Roman",14)).place(width=300,height=30,x=105,y=270)
+		self.Edad = Label(self.FrameR, text="Edad:", font=("Times New Roman",18)).place(x=100,y=310)
+		self.EdadE = Entry(self.FrameR, textvariable=self.TextEE,font=("Times New Roman",14)).place(width=300,height=30,x=105,y=350)
+		self.Sexo = Label(self.FrameR, text="Sexo:", font=("Times New Roman",18)).place(x=100,y=390)
+		self.SexoE = Entry(self.FrameR, textvariable=self.TextSE,font=("Times New Roman",14)).place(width=300,height=30,x=105,y=430)
+		self.Carrera = Label(self.FrameR, text="Carrera:", font=("Times New Roman",18)).place(x=100,y=470)
+		self.CarreraE = Entry(self.FrameR, textvariable=self.TextCE,font=("Times New Roman",14)).place(width=300,height=30,x=105,y=510)
+		self.Campus = Label(self.FrameR, text="Campus UG:", font=("Times New Roman",18)).place(x=500,y=150)
+		self.CampusE = OptionMenu(self.FrameR, self.var, *self.OpcionesCamp)
+		self.CampusE.place(x=505,y=190)
+		self.CampusE.config(width=26, font=("Times New Roman",15))
 		self.Division = Label(self.FrameR, text="Division UG:", font=("Times New Roman",18)).place(x=500,y=240)
-		self.DivsionE = OptionMenu(self.FrameR, self.var, *self.Opciones)
-		self.DivsionE.place(x=505,y=280)
-		self.DivsionE.config(width=26, font=("Times New Roman",15))
+		self.DivisionE = 0
 		self.Correo = Label(self.FrameR, text="Correo:", font=("Times New Roman",18)).place(x=500,y=320)
 		self.CorreoE = Entry(self.FrameR, textvariable=self.TextCrE,font=("Times New Roman",14)).place(width=300,height=30,x=505,y=360)
 		self.Password = Label(self.FrameR, text="Contraseña:", font=("Times New Roman",18)).place(x=500,y=400)
 		self.PasswordE = Entry(self.FrameR, textvariable=self.TextPE,font=("Times New Roman",14)).place(width=300,height=30,x=505,y=440)
-		self.BReg = Button(self.FrameR,text="Regresar",command=self.OpIni,font=("Times New Roman",15)).place(x=500,y=500)
-		self.BEnv = Button(self.FrameR,text="Enviar", command=self.Ingreso,font=("Times New Roman",15)).place(x=600,y=500)
+		self.BReg = Button(self.FrameR,text="Regresar", command=self.OpIni,font=("Times New Roman",15)).place(x=500,y=500)
+		self.BEnv = Button(self.FrameR, text="Enviar", command=self.Ingreso,font=("Times New Roman",15)).place(x=600,y=500)
+		self.GCamp = Button(self.FrameR, text="Guardar", command=self.Divisiones, font=("Times New Roman",15)).place(x=727,y=145)
 		self.Check = Label(self.FrameR)
 		self.Raiz.mainloop()
 
@@ -172,15 +180,46 @@ class Registro():
 		Open = LogIn()
 
 	def Ingreso(self):
+		Division = self.div.get()
+		Texto_Correo = self.TextCrE.get()
+		Texto_Password = self.TextPE.get()
+		
+		file = open("DatosUsuario.csv","a")
+		file.write(Division + ",")
+		file.write(Texto_Correo + ",")
+		file.write(Texto_Password + "\n")
+		file.close()	
+
+		self.Check.config(text="Registro realizado correctamente!",font=("Times New Roman",15),bg="green2")
+		self.Check.place(x=505,y=545)
+
+		self.Check.after(5000,self.OpIni)
+
+	def Divisiones(self):
 		Campus = self.var.get()
+		if Campus == "Campus Guanajato":
+			self.DivisionE = OptionMenu(self.FrameR, self.div, *self.OpcionesDiv_1)
+			self.DivisionE.place(x=505,y=275)
+			self.DivisionE.config(width=35, font=("Times New Roman",12))
+		elif Campus == "Campus Irapuato-Salamanca":
+			self.DivisionE = OptionMenu(self.FrameR, self.div, *self.OpcionesDiv_2)
+			self.DivisionE.place(x=505,y=275)
+			self.DivisionE.config(width=35, font=("Times New Roman",12))
+		elif Campus == "Campus Celaya-Salvatierra":
+			self.DivisionE = OptionMenu(self.FrameR, self.div, *self.OpcionesDiv_3)
+			self.DivisionE.place(x=505,y=275)
+			self.DivisionE.config(width=35, font=("Times New Roman",12))
+		elif Campus == "Campus León":
+			self.DivisionE = OptionMenu(self.FrameR, self.div, *self.OpcionesDiv_4)
+			self.DivisionE.place(x=505,y=275)
+			self.DivisionE.config(width=35, font=("Times New Roman",12))
+
 		Texto_Nombre = self.TextNE.get()
 		Texto_Apellido = self.TextAE.get()
 		Texto_Edad = self.TextEE.get()
 		Texto_Sexo = self.TextSE.get()
 		Texto_Carrera = self.TextCE.get()
-		Texto_Correo = self.TextCrE.get()
-		Texto_Password = self.TextPE.get()
-		
+
 		file = open("DatosUsuario.csv","a")
 		file.write(Texto_Nombre + ",")
 		file.write(Texto_Apellido + ",")
@@ -188,14 +227,8 @@ class Registro():
 		file.write(Texto_Sexo + ",")
 		file.write(Texto_Carrera + ",")
 		file.write(Campus + ",")
-		file.write(Texto_Correo + ",")
-		file.write(Texto_Password + "\n")
-		file.close()	
+		file.close()
 
-		self.Check.config(text="Registro realizado correctamente!",font=("Times New Roman",15),bg="green2")
-		self.Check.place(x=120,y=500)
-
-		self.Check.after(5000,self.OpIni)
 
 class PanelAd():
 	def __init__(self):
@@ -689,8 +722,8 @@ class Call_Func():
 			file.close()
 			app = Pantalla_3()
 
-app = LogIn()
-#app = Registro()
+#app = LogIn()
+app = Registro()
 #app = PanelAd()
 #app = Pantalla_1()
 #app = Call_Func().Call()
