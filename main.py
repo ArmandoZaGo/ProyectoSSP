@@ -62,10 +62,10 @@ class LogIn():
 		archivo.close()
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 
 		cursor = db.cursor()
@@ -108,11 +108,12 @@ class LogIn():
 				if str(Pass) == str(Lista_Password[i]):
 					
 					db = sql.connect(
-					host="127.0.0.1",
-					user="root",
-					passwd="123456",
-					database="usuario"
+						host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+						user="uiut865c60fxqdsj",
+						passwd="wqeOsle44ltxwCFtn9dM",
+						database="bgkjpnpib5jxjik9loxw"
 					)
+					
 
 					cursor = db.cursor()
 
@@ -219,10 +220,10 @@ class Registro():
 		file.close()
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 		
 		cursor = db.cursor()
@@ -275,10 +276,10 @@ class Registro():
 		Texto_Carrera = self.TextCE.get()
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 		
 		cursor = db.cursor()
@@ -328,10 +329,10 @@ class PanelAd():
 	def GCambios(self):
 		
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 
 		cursor = db.cursor()
@@ -348,10 +349,10 @@ class PanelAd():
 		Lista_p3 = re.split(",",Pantalla_3)
 		
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 		
 		cursor = db.cursor()
@@ -366,10 +367,10 @@ class PanelAd():
 
 		
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 		
 		cursor = db.cursor()
@@ -379,10 +380,10 @@ class PanelAd():
 		for i in range(len(Lista_p3)):
 
 			db = sql.connect(
-				host="127.0.0.1",
-				user="root",
-				passwd="123456",
-				database="usuario"
+				host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+				user="uiut865c60fxqdsj",
+				passwd="wqeOsle44ltxwCFtn9dM",
+				database="bgkjpnpib5jxjik9loxw"
 			)
 			cursor = db.cursor()
 			inst = "INSERT INTO preguntas_p3 (id, Preguntas) VALUES (%s, %s)"
@@ -739,10 +740,10 @@ class Pantalla_3():
 	def Most_Preg(self):
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 
 		cursor = db.cursor()
@@ -764,10 +765,10 @@ class Pantalla_3():
 	def Positiva(self):
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 
 		cursor = db.cursor()
@@ -799,10 +800,10 @@ class Pantalla_3():
 	def Negativa(self):
 
 		db = sql.connect(
-			host="127.0.0.1",
-			user="root",
-			passwd="123456",
-			database="usuario"
+			host="bgkjpnpib5jxjik9loxw-mysql.services.clever-cloud.com",
+			user="uiut865c60fxqdsj",
+			passwd="wqeOsle44ltxwCFtn9dM",
+			database="bgkjpnpib5jxjik9loxw"
 		)
 
 		cursor = db.cursor()
