@@ -308,7 +308,7 @@ class PanelAd():
 		self.Pt2 = StringVar()
 		self.Pt3 = StringVar()
 		self.var = StringVar(self.Frame)
-		self.Opciones = ["Comida"]
+		self.Opciones = ["Comida","Deportes"]
 		self.Titulo = Label(self.Frame, text="Panel de Administrador", font=("Times New Roman",45)).place(x=170,y=50)
 		self.TP_1 = Label(self.Frame, text="¿Cuántas veces se mostrará la Pantalla 1?", font=("Times New Roman",20)).place(x=20,y=170)
 		self.TP_1_E = Entry(self.Frame, textvariable=self.Pt1, font=("Times New Roman",15)).place(width=200,height=30,x=500,y=175)
@@ -403,6 +403,23 @@ class PanelAd():
 			file.write("Numero" + ",")
 			file.write("\n" + "1" + ",")
 			file.close()
+
+		remove("Carpeta.csv")
+		carpeta = self.var.get()
+		file = open("Carpeta.csv","a")
+		file.write("Carpeta"+",")
+		file.write("\n" + carpeta + ",")
+		file.close()
+
+		remove("DatosAdmin.csv")
+		file = open("DatosAdmin.csv","a")
+		file.write("Carpeta" + ",")
+		file.write("Pantalla_1" + ",")
+		file.write("Pantalla_2" + "\n")
+		file.write(Carpeta + ",")
+		file.write(Pantalla_1 + ",")
+		file.write(Pantalla_2 + "\n")
+		file.close()
 	
 	def Return(self):
 		self.Raiz.destroy()
@@ -427,7 +444,10 @@ class Pantalla_1():
 		self.P1.mainloop()
 
 	def Asign_Img(self):
-		df = pd.read_csv("Comida.csv")
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+		df = pd.read_csv(nombre + ".csv")
 		df_DA = pd.read_csv("DatosAdmin.csv")
 		L = []
 		for i in range(len(df)):
@@ -476,15 +496,20 @@ class Pantalla_1():
 		esc.close()
 
 	def BT1(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P1.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen1[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_1:" + de.Comida[i])
+		new.write("," + "P_1:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
@@ -509,15 +534,20 @@ class Pantalla_1():
 		app.Call()
 	
 	def BT2(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P1.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen2[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_1:" + de.Comida[i])
+		new.write("," + "P_1:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
@@ -542,15 +572,20 @@ class Pantalla_1():
 		app.Call()
 
 	def BT3(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P1.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen3[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_1:" + de.Comida[i])
+		new.write("," + "P_1:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
@@ -575,15 +610,20 @@ class Pantalla_1():
 		app.Call()
 
 	def BT4(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P1.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen4[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_1:" + de.Comida[i])
+		new.write("," + "P_1:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
@@ -625,7 +665,10 @@ class Pantalla_2():
 		self.P2.mainloop()
 	
 	def Asign_Img(self):
-		df = pd.read_csv("Comida.csv")
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+		df = pd.read_csv(nombre + ".csv")
 		df_DA = pd.read_csv("DatosAdmin.csv")
 		L = []
 		for i in range(len(df)):
@@ -655,15 +698,20 @@ class Pantalla_2():
 		esc.close()
 	
 	def BT1(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P2.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen1[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_2:" + de.Comida[i])
+		new.write("," + "P_2:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
@@ -688,15 +736,20 @@ class Pantalla_2():
 		app.Call()
 	
 	def BT2(self):
+
+		dk = pd.read_csv("Carpeta.csv")
+		nombre = dk.Carpeta[0]
+		print(nombre)
+
 		self.P2.destroy()
 
 		da = pd.read_csv("Auxi.csv")
 		i = int(da.Imagen2[0])
 		i -= 1
-		de = pd.read_csv("Comida.csv")
+		de = pd.read_csv(nombre + ".csv")
 
 		new = open("Historial.csv","a")
-		new.write("," + "P_2:" + de.Comida[i])
+		new.write("," + "P_2:" + de[nombre][i])
 		new.close()
 
 		df = pd.read_csv("CopiaDA.csv")
