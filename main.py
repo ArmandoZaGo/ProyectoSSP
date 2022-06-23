@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import random
 import datetime
 import re
+import mysql.connector as sql
 
 class LogIn():
 	def __init__(self):
@@ -60,18 +61,27 @@ class LogIn():
 		archivo.write(Valor + ",")
 		archivo.close()
 
-		df = pd.read_csv("DatosAdmin.csv")
-		i = int(df.Pantalla_1[0])
-		j = int(df.Pantalla_2[0])
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+
+		cursor = db.cursor()
+		
+		cursor.execute("SELECT * FROM datosadmin;")
+
+		r = cursor.fetchall()
 
 		remove("CopiaDA.csv")
 		file = open("CopiaDA.csv","a")
 		file.write("Carpeta" + ",")
 		file.write("Pantalla_1" + ",")
 		file.write("Pantalla_2" + "\n")
-		file.write(df.Carpeta[0] + ",")
-		file.write(str(i) + ",")
-		file.write(str(j) + "\n")
+		file.write(r[0][0] + ",")
+		file.write(r[0][1] + ",")
+		file.write(r[0][2] + "\n")
 		file.close()
 
 		Correo = self.EAdress.get()
@@ -80,27 +90,45 @@ class LogIn():
 		print(Pass)
 		Lista_Correo = []
 		Lista_Password = []
-		df = pd.read_csv("DatosUsuario.csv")
+		
+		cursor = db.cursor()
+		
+		cursor.execute("SELECT * FROM datosusuario;")
 
-		for i in range(len(df.index)):
-			if Correo == str(df.Correo[i]):
-				k = i
-			else:
-				k = 0
+		r = cursor.fetchall()
 
-		for i in range(len(df.index)):
-			Lista_Correo.append(df.Correo[i])
-			Lista_Password.append(df.Password[i])
-			print(Lista_Password[i])
+		for i in r:
+			Lista_Correo.append(i[7])
+
+		for i in r:
+			Lista_Password.append(i[8])
 
 		for i in range(len(Lista_Correo)):
 			if str(Correo) == Lista_Correo[i]:
 				if str(Pass) == str(Lista_Password[i]):
+					
+					db = sql.connect(
+					host="127.0.0.1",
+					user="root",
+					passwd="123456",
+					database="usuario"
+					)
+
+					cursor = db.cursor()
+
+					x = Lista_Correo[i]
+					inst = "SELECT Nombre, Apellidos FROM datosusuario WHERE Correo = %s"
+					val = (x,)
+
+					cursor.execute(inst, val)
+
+					r = cursor.fetchall()
+
 					self.IniSe.destroy()
 					archivo = open("Historial.csv","a")
-					archivo.write(df.Nombre[k] + ",")
-					archivo.write(df.Apellidos[k] + ",")
-					archivo.write(df.Correo[k])
+					archivo.write(r[0][0] + ",")
+					archivo.write(r[0][1] + ",")
+					archivo.write(Correo)
 					archivo.close()
 					app = Call_Func().Call()
 				else:
@@ -188,7 +216,33 @@ class Registro():
 		file.write(Division + ",")
 		file.write(Texto_Correo + ",")
 		file.write(Texto_Password + "\n")
-		file.close()	
+		file.close()
+
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+		
+		cursor = db.cursor()
+
+		inst = "UPDATE datosusuario SET Division=%s WHERE Division=%s"
+		val = (Division, "NULL")
+
+		cursor.execute(inst, val)
+
+		inst = "UPDATE datosusuario SET Correo=%s WHERE Correo=%s"
+		val = (Texto_Correo, "NULL")
+
+		cursor.execute(inst, val)
+
+		inst = "UPDATE datosusuario SET Password=%s WHERE Password=%s"
+		val = (Texto_Password, "NULL")
+
+		cursor.execute(inst, val)
+
+		db.commit()	
 
 		self.Check.config(text="Registro realizado correctamente!",font=("Times New Roman",15),bg="green2")
 		self.Check.place(x=505,y=545)
@@ -220,14 +274,22 @@ class Registro():
 		Texto_Sexo = self.TextSE.get()
 		Texto_Carrera = self.TextCE.get()
 
-		file = open("DatosUsuario.csv","a")
-		file.write(Texto_Nombre + ",")
-		file.write(Texto_Apellido + ",")
-		file.write(Texto_Edad + ",")
-		file.write(Texto_Sexo + ",")
-		file.write(Texto_Carrera + ",")
-		file.write(Campus + ",")
-		file.close()
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+		
+		cursor = db.cursor()
+
+		inst = "INSERT INTO datosusuario (Nombre, Apellidos, Edad, Sexo, Carrera, Campus, Division, Correo, Password) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+
+		val = (Texto_Nombre, Texto_Apellido, Texto_Edad, Texto_Sexo, Texto_Carrera, Campus, "NULL", "NULL", "NULL")
+
+		cursor.execute(inst, val)
+
+		db.commit()
 
 
 class PanelAd():
@@ -264,48 +326,70 @@ class PanelAd():
 		self.Raiz.mainloop()	
 	
 	def GCambios(self):
-		remove("DatosAdmin.csv")
+		
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+
+		cursor = db.cursor()
+
+		cursor.execute("DELETE FROM datosadmin")
+
+		db.commit()
+
 		Carpeta = self.var.get()
 		Pantalla_1 = self.Pt1.get()
 		Pantalla_2 = self.Pt2.get()
 		Pantalla_3 = self.Pt3.get()
 		print(Pantalla_3)
 		Lista_p3 = re.split(",",Pantalla_3)
-		file = open("DatosAdmin.csv","a")
-		file.write("Carpeta" + ",")
-		file.write("Pantalla_1" + ",")
-		file.write("Pantalla_2" + "\n")
-		file.write(Carpeta + ",")
-		file.write(Pantalla_1 + ",")
-		file.write(Pantalla_2 + "\n")
-		file.close()
+		
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+		
+		cursor = db.cursor()
 
-		remove("Preguntas_P3.csv")
-		for i in range(len(Lista_p3)):
-			if i == len(Lista_p3)-1:
-				file = open("Preguntas_P3.csv","a")
-				file.write("Pregunta" + str(i+1))
-				file.close()
-			else:
-				file = open("Preguntas_P3.csv","a")
-				file.write("Pregunta" + str(i+1) + ",")
-				file.close()
-		file = open("Preguntas_P3.csv","a")
-		file.write("\n")
-		file.close()
+		inst = "INSERT INTO datosadmin (Carpeta, Pantalla_1, Pantalla_2) VALUES (%s, %s, %s)"
+
+		val = (Carpeta, Pantalla_1, Pantalla_2)
+
+		cursor.execute(inst, val)
+
+		db.commit()
+
+		
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+		
+		cursor = db.cursor()
+		cursor.execute("DELETE FROM preguntas_p3")
+		db.commit()
 
 		for i in range(len(Lista_p3)):
-			if i == len(Lista_p3)-1:
-				file = open("Preguntas_P3.csv","a")
-				file.write(Lista_p3[i])
-				file.close()
-			else:
-				file = open("Preguntas_P3.csv","a")
-				file.write(Lista_p3[i] + ",")
-				file.close()
-		file = open("Preguntas_P3.csv","a")
-		file.write("\n")
-		file.close()
+
+			db = sql.connect(
+				host="127.0.0.1",
+				user="root",
+				passwd="123456",
+				database="usuario"
+			)
+			cursor = db.cursor()
+			inst = "INSERT INTO preguntas_p3 (id, Preguntas) VALUES (%s, %s)"
+			val = (str(i+1),Lista_p3[i])
+			cursor.execute(inst, val)
+			db.commit()
+
 
 		remove("NumPe.csv")
 		if Pantalla_3 == "":
@@ -653,21 +737,52 @@ class Pantalla_3():
 		self.P3.mainloop()
 	
 	def Most_Preg(self):
-		ds = pd.read_csv("AuxPre.csv")
 
-		df = pd.read_csv("Preguntas_P3.csv")
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+
+		cursor = db.cursor()
+		cursor.execute("SELECT * FROM preguntas_p3;")
+		r = cursor.fetchall()
+
+		Lista_Preg = ["null"]
+
+		for i in r:
+			Lista_Preg.append(i[1])
+
+		ds = pd.read_csv("AuxPre.csv")
 		i = int(ds.Numero[0])
 		
-		if i > 0 and i <= len(df.axes[1]):
-			self.Pregunta.config(text=df.iloc[0]["Pregunta"+str(i)], bg="green", font=("Times New Roman",40))
+		if i > 0 and i <= len(Lista_Preg):
+			self.Pregunta.config(text=Lista_Preg[i], bg="green", font=("Times New Roman",40))
 			self.Pregunta.place(x=48,y=120,width=800,height=70)
 
 	def Positiva(self):
+
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+
+		cursor = db.cursor()
+		cursor.execute("SELECT * FROM preguntas_p3;")
+		r = cursor.fetchall()
+
+		Lista_Preg = ["null"]
+
+		for i in r:
+			Lista_Preg.append(i[1])
+
 		ds = pd.read_csv("AuxPre.csv")
 		i = int(ds.Numero[0])
-		df = pd.read_csv("Preguntas_P3.csv")
 		new = open("Historial.csv","a")
-		new.write("," + df.iloc[0]["Pregunta"+str(i)] + ": " + "SI")
+		new.write("," + Lista_Preg[i] + ": " + "SI")
 		new.close()
 
 		remove("AuxPre.csv")
@@ -678,15 +793,31 @@ class Pantalla_3():
 
 		self.P3.destroy()
 
-		if i <= len(df.axes[1])-1:
+		if i <= len(Lista_Preg)-2:
 			app = Pantalla_3()
 
 	def Negativa(self):
+
+		db = sql.connect(
+			host="127.0.0.1",
+			user="root",
+			passwd="123456",
+			database="usuario"
+		)
+
+		cursor = db.cursor()
+		cursor.execute("SELECT * FROM preguntas_p3;")
+		r = cursor.fetchall()
+
+		Lista_Preg = ["null"]
+
+		for i in r:
+			Lista_Preg.append(i[1])
+
 		ds = pd.read_csv("AuxPre.csv")
 		i = int(ds.Numero[0])
-		df = pd.read_csv("Preguntas_P3.csv")
 		new = open("Historial.csv","a")
-		new.write("," + df.iloc[0]["Pregunta"+str(i)] + ": " + "NO")
+		new.write("," + Lista_Preg[i] + ": " + "NO")
 		new.close()
 
 		remove("AuxPre.csv")
@@ -697,7 +828,7 @@ class Pantalla_3():
 		
 		self.P3.destroy()
 
-		if i <= len(df.axes[1])-1:
+		if i <= len(Lista_Preg)-2:
 			app = Pantalla_3()
 
 class Call_Func():
@@ -711,7 +842,7 @@ class Call_Func():
 			numero = random.randint(1,2)
 			if numero == 1 and i > 0:
 				app = Pantalla_1()
-			else:
+			elif j > 0:
 				app = Pantalla_2()
 		else:
 			remove("AuxPre.csv")
@@ -722,8 +853,8 @@ class Call_Func():
 			file.close()
 			app = Pantalla_3()
 
-#app = LogIn()
-app = Registro()
+app = LogIn()
+#app = Registro()
 #app = PanelAd()
 #app = Pantalla_1()
 #app = Call_Func().Call()
